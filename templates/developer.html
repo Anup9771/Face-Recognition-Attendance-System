@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 1200px; margin: 20px auto; padding: 0 15px;">
+  <h2 style="text-align: center; margin-bottom: 40px; font-size: clamp(24px, 5vw, 32px); background: linear-gradient(135deg, #00c6ff, #0072ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">👨‍💻 Developer Profile</h2>
+  
+  <!-- Profile Card -->
+  <div style="background: rgba(0,0,0,0.75); padding: clamp(20px, 4vw, 40px); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px;">
+    <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
+      {% if dev and dev.photo %}
+      <img src="{{ url_for('static', filename='images/developer_photos/' + dev.photo) }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #00c6ff; box-shadow: 0 0 20px rgba(0,198,255,0.5);">
+      {% else %}
+      <div style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #00c6ff, #0072ff); display: flex; align-items: center; justify-content: center; font-size: 60px;">👨‍💻</div>
+      {% endif %}
+      
+      <div style="flex: 1; min-width: 250px;">
+        <h3 style="font-size: clamp(22px, 4vw, 28px); color: #00c6ff; margin-bottom: 10px;">{% if dev %}{{ dev.name }}{% else %}Anup Goswami{% endif %}</h3>
+        <p style="font-size: clamp(14px, 2.5vw, 18px); color: #aaa; margin-bottom: 15px;">Data Science & AI Engineer | ML Enthusiast</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
+          <a href="mailto:{% if dev %}{{ dev.email }}{% else %}anup@example.com{% endif %}" style="text-decoration: none; color: #00c6ff; font-size: clamp(12px, 2vw, 16px);">📧 {% if dev %}{{ dev.email }}{% else %}Email{% endif %}</a>
+          <span style="color: #00c6ff; font-size: clamp(12px, 2vw, 16px);">📱 {% if dev %}{{ dev.contact }}{% else %}Contact{% endif %}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Me Section -->
+  <div style="background: rgba(0,0,0,0.75); padding: clamp(20px, 4vw, 40px); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px;">
+    <h3 style="font-size: clamp(20px, 4vw, 24px); color: #00c6ff; margin-bottom: 20px; border-bottom: 2px solid #00c6ff; padding-bottom: 10px;">💡 About Me</h3>
+    <p style="line-height: 1.8; font-size: clamp(14px, 2.5vw, 16px); color: #ddd; margin-bottom: 15px;">
+      Hi, I'm <strong style="color: #00c6ff;">Anup Goswami</strong> — an aspiring Data Science & Artificial Intelligence Engineer and Machine Learning enthusiast who loves turning ideas into intelligent systems. I'm deeply fascinated by how data and algorithms can shape the future of healthcare, automation, and creativity in technology.
+    </p>
+    <p style="line-height: 1.8; font-size: clamp(14px, 2.5vw, 16px); color: #ddd; margin-bottom: 15px;">
+      Beyond code, I enjoy exploring design, experimenting with motion and interaction, and finding ways to blend artistic creativity with technical precision. My goal is to build solutions that not only perform — but also inspire.
+    </p>
+    <p style="line-height: 1.8; font-size: clamp(14px, 2.5vw, 16px); color: #ddd;">
+      3rd-year B.Tech Computer Science Engineering student with hands-on experience in Python & Machine Learning Projects. Proficient in Python, Pandas, NumPy, scikit-learn, PyTorch, TensorFlow and data preprocessing. Seeking internship opportunities to apply skills and contribute to impactful AI solutions.
+    </p>
+  </div>
+
+  <!-- Skills Section -->
+  <div style="background: rgba(0,0,0,0.75); padding: clamp(20px, 4vw, 40px); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px;">
+    <h3 style="font-size: clamp(20px, 4vw, 24px); color: #00c6ff; margin-bottom: 20px; border-bottom: 2px solid #00c6ff; padding-bottom: 10px;">🚀 Technical Skills</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+      <div style="background: rgba(0,198,255,0.1); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid rgba(0,198,255,0.3);">
+        <div style="font-size: 30px; margin-bottom: 8px;">🐍</div>
+        <div style="font-size: clamp(12px, 2vw, 14px); color: #00c6ff;">Python</div>
+      </div>
+      <div style="background: rgba(0,198,255,0.1); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid rgba(0,198,255,0.3);">
+        <div style="font-size: 30px; margin-bottom: 8px;">🤖</div>
+        <div style="font-size: clamp(12px, 2vw, 14px); color: #00c6ff;">Machine Learning</div>
+      </div>
+      <div style="background: rgba(0,198,255,0.1); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid rgba(0,198,255,0.3);">
+        <div style="font-size: 30px; margin-bottom: 8px;">🔥</div>
+        <div style="font-size: clamp(12px, 2vw, 14px); color: #00c6ff;">PyTorch</div>
+      </div>
+      <div style="background: rgba(0,198,255,0.1); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid rgba(0,198,255,0.3);">
+        <div style="font-size: 30px; margin-bottom: 8px;">🧠</div>
+        <div style="font-size: clamp(12px, 2vw, 14px); color: #00c6ff;">TensorFlow</div>
+      </div>
+      <div style="background: rgba(0,198,255,0.1); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid rgba(0,198,255,0.3);">
+        <div style="font-size: 30px; margin-bottom: 8px;">📊</div>
+        <div style="font-size: clamp(12px, 2vw, 14px); color: #00c6ff;">Pandas & NumPy</div>
+      </div>
+      <div style="background: rgba(0,198,255,0.1); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid rgba(0,198,255,0.3);">
+        <div style="font-size: 30px; margin-bottom: 8px;">🌐</div>
+        <div style="font-size: clamp(12px, 2vw, 14px); color: #00c6ff;">Flask & Web Dev</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Education Section -->
+  <div style="background: rgba(0,0,0,0.75); padding: clamp(20px, 4vw, 40px); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px;">
+    <h3 style="font-size: clamp(20px, 4vw, 24px); color: #00c6ff; margin-bottom: 20px; border-bottom: 2px solid #00c6ff; padding-bottom: 10px;">🎓 Education</h3>
+    
+    <!-- B.Tech -->
+    <div style="margin-bottom: 25px; padding: 20px; background: rgba(0,198,255,0.05); border-radius: 10px; border-left: 4px solid #00c6ff;">
+      <h4 style="font-size: clamp(16px, 3vw, 20px); color: #00c6ff; margin-bottom: 8px;">B.Tech in Computer Science Engineering</h4>
+      <p style="font-size: clamp(13px, 2vw, 15px); color: #aaa; margin-bottom: 5px;">K.U.K (Kurukshetra University) — Kurukshetra, Haryana</p>
+      <p style="font-size: clamp(12px, 2vw, 14px); color: #ddd;">3rd Year (Pursuing) | GPA: 8.0 | 2023 – 2027</p>
+    </div>
+
+    <!-- 12th -->
+    <div style="margin-bottom: 25px; padding: 20px; background: rgba(0,198,255,0.05); border-radius: 10px; border-left: 4px solid #00c6ff;">
+      <h4 style="font-size: clamp(16px, 3vw, 20px); color: #00c6ff; margin-bottom: 8px;">Higher Secondary Education (12th Grade)</h4>
+      <p style="font-size: clamp(13px, 2vw, 15px); color: #aaa; margin-bottom: 5px;">+2 High School Charghara — Giridih, Jharkhand</p>
+      <p style="font-size: clamp(12px, 2vw, 14px); color: #ddd;">Jharkhand Board | Percentage: 79% | Completed in 2023</p>
+    </div>
+
+    <!-- 10th -->
+    <div style="padding: 20px; background: rgba(0,198,255,0.05); border-radius: 10px; border-left: 4px solid #00c6ff;">
+      <h4 style="font-size: clamp(16px, 3vw, 20px); color: #00c6ff; margin-bottom: 8px;">Secondary Education (10th Grade)</h4>
+      <p style="font-size: clamp(13px, 2vw, 15px); color: #aaa; margin-bottom: 5px;">Utkarmit High School Dwarpahari — Giridih, Jharkhand</p>
+      <p style="font-size: clamp(12px, 2vw, 14px); color: #ddd;">Jharkhand Board | Percentage: 87.80% | Completed in 2021</p>
+    </div>
+  </div>
+
+  <!-- Project Info -->
+  <div style="background: linear-gradient(135deg, rgba(0,198,255,0.1), rgba(0,114,255,0.1)); padding: clamp(20px, 4vw, 40px); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(0,198,255,0.3); text-align: center;">
+    <h3 style="font-size: clamp(18px, 4vw, 22px); color: #00c6ff; margin-bottom: 15px;">🎯 Current Project</h3>
+    <p style="font-size: clamp(14px, 2.5vw, 16px); color: #ddd; line-height: 1.6;">
+      <strong>Smart Face Recognition Attendance System</strong><br>
+      A web-based attendance management system using Flask, OpenCV, and MediaPipe for real-time face detection and recognition.
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="text-align: center; max-width: 800px; margin: 20px auto; padding: 0 15px;">
+  <h2 style="margin-bottom: 30px; font-size: clamp(20px, 5vw, 28px);">📸 Face Recognition</h2>
+  
+  <div id="startScreen" style="background: rgba(0,0,0,0.75); padding: clamp(30px, 5vw, 50px); border-radius: 15px; backdrop-filter: blur(10px);">
+    <p style="font-size: clamp(14px, 3vw, 18px); margin-bottom: 30px;">Click the button below to start face recognition and mark attendance automatically.</p>
+    <button onclick="startCamera()" style="padding: 15px 40px; font-size: clamp(14px, 3vw, 18px); width: 100%; max-width: 300px;">📹 Start Face Recognition</button>
+  </div>
+  
+  <div id="cameraScreen" style="display: none;">
+    <p style="margin-bottom: 20px; font-size: clamp(14px, 3vw, 16px);">Camera is active. Stand in front of camera for attendance.</p>
+    <img id="videoFeed" src="" style="width: 100%; max-width: 640px; height: auto; border-radius: 15px;">
+    <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+      <button onclick="stopCamera()" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f); padding: 12px 30px; font-size: clamp(12px, 2.5vw, 16px);">❌ Stop Camera</button>
+      <a href="{{ url_for('attendance') }}"><button style="padding: 12px 30px; font-size: clamp(12px, 2.5vw, 16px);">📋 View Attendance</button></a>
+    </div>
+  </div>
+  
+  <div id="successScreen" style="display: none; background: rgba(0,255,0,0.2); padding: clamp(30px, 5vw, 50px); border-radius: 15px; backdrop-filter: blur(10px);">
+    <h3 style="color: #00ff00; margin-bottom: 20px; font-size: clamp(18px, 4vw, 24px);">✅ Attendance Marked Successfully!</h3>
+    <p style="font-size: clamp(14px, 3vw, 18px); margin-bottom: 30px;">Your attendance has been recorded.</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+      <a href="{{ url_for('attendance') }}"><button style="padding: 15px 40px; font-size: clamp(14px, 3vw, 18px);">📋 View Attendance</button></a>
+      <button onclick="restartCamera()" style="padding: 15px 40px; font-size: clamp(14px, 3vw, 18px);">🔄 Mark Another</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let checkInterval;
+
+function startCamera() {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('cameraScreen').style.display = 'block';
+  document.getElementById('successScreen').style.display = 'none';
+  document.getElementById('videoFeed').src = "{{ url_for('video_feed') }}?t=" + new Date().getTime();
+  
+  checkInterval = setInterval(checkStreamStatus, 1000);
+}
+
+function checkStreamStatus() {
+  const img = document.getElementById('videoFeed');
+  if (img.naturalWidth === 0 || img.complete === false) {
+    clearInterval(checkInterval);
+    showSuccess();
+  }
+}
+
+function showSuccess() {
+  document.getElementById('cameraScreen').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+  document.getElementById('videoFeed').src = '';
+}
+
+function stopCamera() {
+  clearInterval(checkInterval);
+  document.getElementById('videoFeed').src = '';
+  document.getElementById('cameraScreen').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+}
+
+function restartCamera() {
+  startCamera();
+}
+</script>
+{% endblock %}

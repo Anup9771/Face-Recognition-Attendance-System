@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Student Details</h2>
+<form method="POST" enctype="multipart/form-data" style="max-width: 400px;">
+    <label style="color: #00c6ff;">Name:</label><br>
+    <input type="text" name="name" value="{{ student.name }}" required><br>
+    
+    <label style="color: #00c6ff;">Roll Number:</label><br>
+    <input type="text" name="roll_no" value="{{ student.roll_no }}" required><br>
+    
+    <label style="color: #00c6ff;">Class:</label><br>
+    <input type="text" name="class_name" value="{{ student.class_name }}" required><br>
+    
+    <label style="color: #00c6ff;">Current Photo:</label><br>
+    <img src="{{ url_for('static', filename='images/student_photos/' + student.photo) }}" width="100" style="margin: 10px 0;"><br>
+    
+    <label style="color: #00c6ff;">Change Photo (optional):</label><br>
+    <input type="file" name="photo" accept="image/*"><br>
+    
+    <button type="submit">Update Student</button>
+    <a href="{{ url_for('dashboard') }}"><button type="button" style="background: #666; margin-left: 10px;">Cancel</button></a>
+</form>
+{% endblock %}

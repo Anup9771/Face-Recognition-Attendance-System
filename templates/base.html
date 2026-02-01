@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Face Recognition Attendance</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <nav style="display: flex; justify-content: space-between; align-items: stretch; padding: 0; background: linear-gradient(135deg, rgba(15,32,39,0.95), rgba(32,58,67,0.95)); border: 1px solid rgba(255,255,255,0.1);">
+    <div style="display: flex;">
+      <a href="{{ url_for('dashboard') }}" style="padding: 18px 24px; border-bottom: 3px solid transparent;" title="Dashboard">📊 Dashboard</a>
+      <a href="{{ url_for('student_register') }}" style="padding: 18px 24px; border-bottom: 3px solid transparent;" title="Register Student">➕ Register</a>
+      <a href="{{ url_for('face_recognition_page') }}" style="padding: 18px 24px; border-bottom: 3px solid transparent;" title="Face Recognition">📸 Face Recognition</a>
+      <a href="{{ url_for('attendance') }}" style="padding: 18px 24px; border-bottom: 3px solid transparent;" title="Attendance">📋 Attendance</a>
+      <a href="{{ url_for('developer') }}" style="padding: 18px 24px; border-bottom: 3px solid transparent;" title="Developer">👨💻 Developer</a>
+      <a href="{{ url_for('helpdesk') }}" style="padding: 18px 24px; border-bottom: 3px solid transparent;" title="Help">❓ Help</a>
+    </div>
+    <div style="display: flex;">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('logout') }}" onclick="return confirm('🚪 Logout?')" style="padding: 18px 24px; background: rgba(255,107,107,0.2); border-left: 1px solid rgba(255,255,255,0.1); border-bottom: 3px solid transparent;" title="Logout">🚪 Logout</a>
+      {% endif %}
+    </div>
+  </nav>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flash-messages" id="flashMessages">
+        {% for msg in messages %}
+          <li>{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+  
+  <footer style="background: linear-gradient(135deg, rgba(15,32,39,0.95), rgba(32,58,67,0.95)); padding: 20px; text-align: center; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+    <p style="margin: 0; font-size: 14px; color: #aaa;">Made with ❤️ by <strong style="color: #00c6ff;">Anup Goswami</strong></p>
+    <p style="margin: 5px 0 0 0; font-size: 12px; color: #777;">Smart Face Recognition Attendance System © 2024</p>
+  </footer>
+  
+  <script>
+    const flashMessages = document.getElementById('flashMessages');
+    if (flashMessages) {
+      setTimeout(() => {
+        flashMessages.classList.add('fade-out');
+        setTimeout(() => {
+          flashMessages.style.display = 'none';
+        }, 500);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Attendance Records</h2>
+
+<form method="GET" style="margin-bottom: 20px; max-width: 400px;">
+  <label style="color: #00c6ff; font-weight: bold;">📅 Filter by Date:</label><br>
+  <input type="date" name="date" value="{{ date_filter if date_filter }}" style="margin-right: 10px;">
+  <button type="submit">Filter</button>
+  <a href="{{ url_for('attendance') }}" style="margin-left: 10px;"><button type="button" style="background: #666;">Clear</button></a>
+</form>
+
+<table border="1" style="width:100%;">
+  <tr><th>Name</th><th>Roll No</th><th>Time</th><th>Action</th></tr>
+  {% for rec in records %}
+    <tr>
+      <td>{{ rec.name }}</td>
+      <td>{{ rec.roll_no }}</td>
+      <td>{{ rec.time }}</td>
+      <td>
+        <form method="POST" action="{{ url_for('delete_attendance', id=rec.id) }}" style="display: inline;" onsubmit="return deleteAttendance(this);">
+          <input type="hidden" name="password" id="password_{{ rec.id }}">
+          <button type="submit" style="background: #ff6b6b; padding: 5px 10px; cursor: pointer;">🗑️ Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4" style="text-align: center;">No records found</td></tr>
+  {% endfor %}
+</table>
+
+<script>
+function deleteAttendance(form) {
+  const password = prompt('🔒 Enter Admin Password to delete attendance:');
+  if (password === null) {
+    return false; // User cancelled
+  }
+  if (password === '') {
+    alert('❌ Password cannot be empty!');
+    return false;
+  }
+  // Set password in hidden field
+  form.querySelector('input[name="password"]').value = password;
+  return true;
+}
+</script>
+{% endblock %}
