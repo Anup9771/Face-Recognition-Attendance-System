@@ -2,11 +2,18 @@ services:
   - type: web
     name: face-recognition-app
     env: python
+<<<<<<< HEAD
     runtime: python
+=======
+>>>>>>> 30493a302b6441e43d7d1916e5890c3632072dd0
     buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
+<<<<<<< HEAD
         value: 3.11.9
+=======
+        value: 3.11.0
+>>>>>>> 30493a302b6441e43d7d1916e5890c3632072dd0
       - key: SECRET_KEY
         generateValue: true
