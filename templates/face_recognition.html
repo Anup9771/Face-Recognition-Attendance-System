@@ -1,8 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
 <div style="text-align: center; max-width: 800px; margin: 20px auto; padding: 0 15px;">
-  <h2 style="margin-bottom: 30px; font-size: clamp(20px, 5vw, 28px);">📸 Face Recognition</h2>
+  <h2 style="margin-bottom: 30px; font-size: clamp(20px, 5vw, 28px);">📸 Face Recognition Attendance</h2>
   
+  {% if is_production %}
+  <div style="background: rgba(0,198,255,0.2); padding: clamp(30px, 5vw, 50px); border-radius: 15px; backdrop-filter: blur(10px); border: 2px solid #00c6ff;">
+    <h3 style="color: #00c6ff; margin-bottom: 20px; font-size: clamp(18px, 4vw, 24px);">📸 Upload Photo for Attendance</h3>
+    <p style="font-size: clamp(14px, 3vw, 16px); margin-bottom: 20px;">Upload your photo to mark attendance</p>
+    <form action="{{ url_for('mark_attendance_photo') }}" method="POST" enctype="multipart/form-data" style="max-width: 400px; margin: 0 auto;">
+      <input type="file" name="photo" accept="image/*" capture="user" required style="width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 10px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3);">
+      <button type="submit" style="width: 100%; padding: 15px 40px; font-size: clamp(14px, 3vw, 18px); background: linear-gradient(135deg, #00c6ff, #0072ff);">✅ Mark Attendance</button>
+    </form>
+  </div>
+  {% else %}
   <div id="startScreen" style="background: rgba(0,0,0,0.75); padding: clamp(30px, 5vw, 50px); border-radius: 15px; backdrop-filter: blur(10px);">
     <p style="font-size: clamp(14px, 3vw, 18px); margin-bottom: 30px;">Click the button below to start face recognition and mark attendance automatically.</p>
     <button onclick="startCamera()" style="padding: 15px 40px; font-size: clamp(14px, 3vw, 18px); width: 100%; max-width: 300px;">📹 Start Face Recognition</button>
@@ -25,6 +35,7 @@
       <button onclick="restartCamera()" style="padding: 15px 40px; font-size: clamp(14px, 3vw, 18px);">🔄 Mark Another</button>
     </div>
   </div>
+  {% endif %}
 </div>
 
 <script>

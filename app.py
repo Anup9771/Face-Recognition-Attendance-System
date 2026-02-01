@@ -258,7 +258,95 @@ def edit_student(id):
 @app.route('/face_recognition')
 @login_required
 def face_recognition_page():
-    return render_template('face_recognition.html')
+    # Check if running on server (no camera available)
+    is_production = os.environ.get('RENDER') or os.environ.get('RAILWAY_ENVIRONMENT')
+    return render_template('face_recognition.html', is_production=is_production)
+
+@app.route('/mark_attendance_photo', methods=['POST'])
+@login_required
+def mark_attendance_photo():
+    photo = request.files.get('photo')
+    
+    if not photo or not allowed_file(photo.filename):
+        flash("Please upload a valid photo!")
+        return redirect(url_for('face_recognition_page'))
+    
+    try:
+        # Read uploaded photo
+        import numpy as np
+        from PIL import Image
+        import io
+        
+        img_bytes = photo.read()
+        img = Image.open(io.BytesIO(img_bytes))
+        img_array = np.array(img)
+        
+        # Convert to BGR for OpenCV
+        if len(img_array.shape) == 2:
+            img_bgr = cv2.cvtColor(img_array, cv2.COLOR_GRAY2BGR)
+        elif img_array.shape[2] == 4:
+            img_bgr = cv2.cvtColor(img_array, cv2.COLOR_RGBA2BGR)
+        else:
+            img_bgr = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
+        
+        # Face recognition
+        recognizer = FaceRecognizer()
+        face_locations = recognizer.detect_faces(img_bgr)
+        
+        if not face_locations:
+            flash("No face detected! Please upload a clear photo.")
+            recognizer.release()
+            return redirect(url_for('face_recognition_page'))
+        
+        face_encodings = recognizer.get_face_encodings(img_bgr, face_locations)
+        
+        if not face_encodings:
+            flash("Could not process face! Try again.")
+            recognizer.release()
+            return redirect(url_for('face_recognition_page'))
+        
+        # Load known faces
+        known_encodings, known_ids = load_known_faces(recognizer)
+        
+        if not known_encodings:
+            flash("No students registered yet!")
+            recognizer.release()
+            return redirect(url_for('face_recognition_page'))
+        
+        # Match face
+        face_encoding = face_encodings[0]
+        matches = recognizer.compare_faces(known_encodings, face_encoding, tolerance=0.85)
+        face_distances = recognizer.face_distance(known_encodings, face_encoding)
+        best_index = np.argmin(face_distances)
+        
+        if matches[best_index] and face_distances[best_index] < 0.15:
+            student_id = known_ids[best_index]
+            student = Student.query.get(student_id)
+            
+            # Check if already marked today
+            today = datetime.datetime.now().date()
+            existing = Attendance.query.filter(
+                Attendance.student_id == student_id,
+                Attendance.time.like(f"{today}%")
+            ).first()
+            
+            if existing:
+                flash(f"Attendance already marked for {student.name} today!")
+            else:
+                time_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                att = Attendance(student_id=student_id, time=time_str)
+                db.session.add(att)
+                db.session.commit()
+                flash(f"Attendance marked successfully for {student.name}!")
+        else:
+            flash("Face not recognized! Please register first.")
+        
+        recognizer.release()
+        
+    except Exception as e:
+        flash(f"Error: {str(e)}")
+    
+    return redirect(url_for('face_recognition_page'))
 
 @app.route('/video_feed')
 @login_required
